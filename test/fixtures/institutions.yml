@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  ofx_fid: 1
+  ofx_org: MyString
+  url: MyString
+  username: MyString
+  password: MyString
+  name: MyString
+
+two:
+  user_id: 1
+  ofx_fid: 1
+  ofx_org: MyString
+  url: MyString
+  username: MyString
+  password: MyString
+  name: MyString

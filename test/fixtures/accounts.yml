@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  institution_id: 1
+  account_number: MyString
+  name: MyString
+  routing_number: MyString
+  balance: 9.99
+  ofx_broker: MyString
+
+two:
+  institution_id: 1
+  account_number: MyString
+  name: MyString
+  routing_number: MyString
+  balance: 9.99
+  ofx_broker: MyString

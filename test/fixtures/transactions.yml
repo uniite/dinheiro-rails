@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  account_id: 1
+  currency: MyString
+  date: 2013-09-27 22:08:44
+  payee: MyString
+  ofx_transaction: MyString
+  mcc: 1
+  memo: MyString
+  type: 
+  category_id: 1
+
+two:
+  account_id: 1
+  currency: MyString
+  date: 2013-09-27 22:08:44
+  payee: MyString
+  ofx_transaction: MyString
+  mcc: 1
+  memo: MyString
+  type: 
+  category_id: 1
