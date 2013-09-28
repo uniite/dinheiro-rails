@@ -1,0 +1,59 @@
+<div class="span12">
+  <h1>Categories</h1>
+</div>
+
+<div class="span12">
+  <%= link_to 'New', new_category_path, class: 'btn btn-success' %>
+</div>
+
+<div class="span12">
+  <table class="table">
+    <thead>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Parent</th>
+    <th style="width: 5em"></th>
+    </thead>
+    <tbody>
+      <% @categories.each do |c| %>
+        <tr ng-repeat="c in categories">
+          <td><%= c.id %></td>
+          <td><%= c.name %></td>
+          <td><%= c.parent %></td>
+          <td>
+            <div style="white-space: nowrap">
+              <a class="btn btn-default" href="#/categories/<%= c.id %>/rules/new">New Rule</a>&nbsp;
+              <a class="btn btn-default" href="#/categories/<%= c.id %>/edit">Edit</a>&nbsp;
+              <button type="button" class="btn btn-danger" ng-click="delete(c)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @categories.each do |category| %>
+      <tr>
+        <td><%= link_to 'Show', category %></td>
+        <td><%= link_to 'Edit', edit_category_path(category) %></td>
+        <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Category', new_category_path %>

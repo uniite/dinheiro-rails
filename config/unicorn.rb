@@ -1,6 +1,6 @@
-if ENV['RACK_ENV'] == 'development'
+unless ENV['BOXEN_SOCKET_DIR'].nil?
   worker_processes 1
-  listen "#{ENV['BOXEN_SOCKET_DIR']}/rails_app", :backlog => 1024
+  listen "#{ENV['BOXEN_SOCKET_DIR']}/dinheiro", :backlog => 1024
   timeout 120
 end
 

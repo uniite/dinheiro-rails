@@ -1,0 +1,12 @@
+<h1>Accounts</h1>
+
+<div>
+  <% @accounts.each do |account| %>
+    <div class="span6">
+      <strong>Name:</strong> <%= account.name %><br />
+      <strong>Account Number:</strong> <%= account.account_number %><br />
+      <%= link_to 'View', account, class: 'btn btn-default' %>
+    </div>
+  <% end %>
+</div>
+
