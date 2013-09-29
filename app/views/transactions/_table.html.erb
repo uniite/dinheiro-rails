@@ -1,0 +1,23 @@
+<div class="span12">
+  <table class="table">
+    <thead>
+    <th>Date</th>
+    <th>Payee</th>
+    <th class="hidden-xs hidden-sm">Type</th>
+    <th class="hidden-xs">Category</th>
+    <th>Amount</th>
+    </thead>
+    <%#<tr ng-repeat="t in transactions | filter:search_text | filter:categoryFilter | orderBy:sort_field">%>
+    <tbody>
+    <% @transactions.each do |t| %>
+      <tr>
+        <td><%= t.date %></td>
+        <td><%= t.payee %></td>
+        <td class="hidden-xs hidden-sm"><%= t.type %></td>
+        <td class="hidden-xs"><%= t.category.name %></td>
+        <td style="text-align: right;"><%= t.amount %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

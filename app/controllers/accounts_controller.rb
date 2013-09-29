@@ -11,6 +11,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1.json
   def show
     @account = Account.includes(transactions: :category).find(params[:id])
+    @transactions = @account.transactions
   end
 
   private

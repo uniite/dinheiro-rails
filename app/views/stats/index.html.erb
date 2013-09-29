@@ -1,0 +1,75 @@
+<div class="span12">
+  <h1>Listing stats</h1>
+
+  <div id="chart" style="width: 90%; height: 400px"></div>
+
+  <script>
+    $(function () {
+      $('#chart').highcharts({
+        chart: {
+          type: 'area'
+        },
+        title: {
+          text: 'Spending per Month by Category'
+        },
+        subtitle: {
+          text: '...'
+        },
+        xAxis: {
+          categories: <%= raw @months.to_json %>,
+          tickmarkPlacement: 'on',
+          title: {
+            enabled: false
+          }
+        },
+        yAxis: {
+          title: {
+            text: 'Dollars'
+          }
+        },
+        tooltip: {
+          shared: true,
+          valueSuffix: ' USD'
+        },
+        plotOptions: {
+          area: {
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+              lineWidth: 1,
+              lineColor: '#666666'
+            }
+          }
+        },
+        series: <%= @table.each_with_index.map do |row,i|
+          { name: @categories[i].name, data: row.map { |x| x.to_f.abs }}
+        end.to_json.html_safe %>
+      });
+    });
+  </script>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <% @months.each do |m| %>
+          <th><%= link_to m.to_s, transactions_path(date_start: m, date_end: m.end_of_month) %></th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @categories.each_with_index do |c,i| %>
+        <tr>
+          <td><strong>
+            <%= link_to c.name, transactions_path(category_id: c.id) %>
+          </strong></td>
+          <% @table[i].each do |stat| %>
+            <td><%= stat %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
