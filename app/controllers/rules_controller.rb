@@ -14,7 +14,9 @@ class RulesController < ApplicationController
 
   # GET /rules/new
   def new
-    @rule = Rule.new
+    # Allow category_id to be specified as an optional param
+    # Default field to payee
+    @rule = Rule.new(params.permit(:category_id).merge({ field: 'payee' }))
   end
 
   # GET /rules/1/edit
@@ -62,13 +64,12 @@ class RulesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_rule
       @rule = Rule.find(params[:id])
     end
 
     # Never trusst parameters from the scary internet, only allow the white list through.
     def rule_params
-      params[:rule]
+      params.require(:rule).permit(:category_id, :field, :operation, :content)
     end
 end

@@ -4,3 +4,31 @@
 
 <%= link_to 'Show', @category %> |
 <%= link_to 'Back', categories_path %>
+
+<div class="span12">
+  <h3>Rules</h3>
+  <%= button_to_new Rule, class: 'btn-success', params: { category_id: @category.id } %>
+  <table class="table">
+    <thead>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Content</th>
+    <th style="width: 5em"></th>
+    </thead>
+    <tbody>
+      <% @category.rules.each do |r| %>
+        <tr ng-repeat="r in category.rules">
+          <td><%= r.field %></td>
+          <td><%= r.operator %></td>
+          <td><%= r.content %></td>
+          <td>
+            <div style="white-space: nowrap">
+              <%= button_to_edit r %>
+              <%= button_to_destroy r %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

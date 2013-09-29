@@ -41,6 +41,10 @@ module ApplicationHelper
       unless record_or_class.instance_of? Class
         route_options[:id] = record_or_class.id
       end
+      # If we're passed other route options, add them in
+      if options[:params]
+        route_options.merge! options.delete(:params)
+      end
       # If this is a destroy, we need to pass the record rather than a URL
       if action == :destroy
         link_to text, record_or_class, options

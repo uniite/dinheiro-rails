@@ -1,0 +1,37 @@
+<div class="span12">
+  <%= form_for(@rule) do |f| %>
+    <% if @rule.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@rule.errors.count, 'error') %> prohibited this rule from being saved:</h2>
+
+        <ul>
+          <% @rule.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= label_tag :category %>
+      <%= text_field_tag :category, @rule.category.name, class: 'form-control', readonly: true %>
+    </div>
+    <div class="form-group">
+      <%= f.label :field %>
+      <%= f.select :field, Rule::FIELDS.map { |id,name| [name, id] }, {}, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :operator %>
+      <%= f.select :operator, Rule::OPERATORS.map { |id,name| [name, id] }, {}, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :content %>
+      <%= f.text_field :content, class: 'form-control' %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
+

@@ -5,13 +5,13 @@
   <strong>Name:</strong> <%= @account.name %><br />
   <strong>Account Number:</strong> <%= @account.account_number %><br />
   <strong>Balance:</strong> <%= @account.balance %><br />
-  <button class="btn blue" data-loading-text="Syncing..." ng-click="sync(account, $event)">Sync</button>
+  <button class="btn btn-primary" data-loading-text="Syncing..." ng-click="sync(account, $event)">Sync</button>
 </div>
 
 <div class="span6" style="padding-top: 1em">
   <strong>Filter: </strong>
-  <input ng-model="search_text" />
-  <select ng-model="category" ng-options="c.name for c in categories">
+  <input ng-model="search_text" class="form-control" style="display: inline; width: 10em" />
+  <select ng-model="category" class="form-control" style="display: inline; width: 10em">
     <option value="">(all)</option>
   </select>
 </div>

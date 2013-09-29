@@ -22,7 +22,7 @@
           <td><%= c.parent.name unless c.parent.nil? %></td>
           <td>
             <div style="white-space: nowrap">
-              <%= button_to_new Rule, text: 'New Rule' %>
+              <%= button_to_new Rule, params: { category_id: c.id }, text: 'New Rule' %>
               <%= button_to_edit c %>
               &nbsp;
               <%= button_to_destroy c %>
