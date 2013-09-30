@@ -12,6 +12,7 @@ class TransactionsController < ApplicationController
       end
       date_start, date_end = filter_params[:date_start], filter_params[:date_end]
       if date_start and date_end
+        puts date_end
         @transactions = @transactions.where(date: Date.parse(date_start)..Date.parse(date_end))
       end
     else
