@@ -5,7 +5,7 @@ class CreateAccounts < ActiveRecord::Migration
       t.string :account_number
       t.string :name
       t.string :routing_number
-      t.decimal :balance
+      t.decimal :balance, precision: 15, scale: 2
       t.string :ofx_broker
 
       t.timestamps

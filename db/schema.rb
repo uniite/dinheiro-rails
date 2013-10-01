@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20130928021014) do
     t.string   "account_number"
     t.string   "name"
     t.string   "routing_number"
-    t.decimal  "balance",        precision: 10, scale: 0
+    t.decimal  "balance",        precision: 15, scale: 2
     t.string   "ofx_broker"
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -44,4 +44,7 @@ gem 'unicorn'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+
+# Gems that didn't come from the rails generators
 gem 'httparty', '~> 0.11'
+gem 'ofx', '~> 0.3.2'
