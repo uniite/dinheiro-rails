@@ -16,7 +16,6 @@ class TransactionsController < ApplicationController
         if filter_params[:top_level].present?
           # Need to get all child categories of the given category_id, and use it to filter the transactions
           categories = Category.all.select { |c| c.top_level.id == category_id }
-          puts categories.inspect
           @transactions = @transactions.where(['category_id IN (?)', categories])
         else
           @transactions = @transactions.where(category_id: category_id)
@@ -75,7 +74,7 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /transactions/1
+  # PATCH/RPUT /transactions/1
   # PATCH/PUT /transactions/1.json
   def update
     respond_to do |format|
