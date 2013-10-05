@@ -15,7 +15,7 @@
         <td><%= t.payee %></td>
         <td class="hidden-xs hidden-sm"><%= t.type %></td>
         <td class="hidden-xs"><%= t.category.name %></td>
-        <td style="text-align: right;"><%= t.amount %></td>
+        <td style="text-align: right;"><%= number_to_currency t.amount %></td>
       </tr>
     <% end %>
     </tbody>
