@@ -6,3 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+unless Category.find_by_name('Uncategorized')
+  Category.new(name: 'Uncategorized', parent: nil)
+end

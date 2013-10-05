@@ -2,7 +2,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :account
   belongs_to :category
 
-  DEFAULT_CATEGORY = Category.new(name: 'Uncategorized', parent: nil)
+  DEFAULT_CATEGORY = Category.find_by_name('Uncategorized')
 
   after_initialize :ensure_category_present
 
