@@ -4,21 +4,33 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    filter_params = params.permit(:category_id, :date_start, :date_end)
+    filter_params = params.permit(:category_id, :date_start, :date_end, :top_level)
     sort_params = params.permit(:sort)
+    # Apply the given filters
     if filter_params
+      # Category Filter
       @transactions = Transaction
       if filter_params[:category_id]
-        @transactions = @transactions.where(category_id: filter_params[:category_id])
+        category_id = Integer(filter_params[:category_id])
+        # Need to do some extra work if top_level=true
+        if filter_params[:top_level].present?
+          # Need to get all child categories of the given category_id, and use it to filter the transactions
+          categories = Category.all.select { |c| c.top_level.id == category_id }
+          puts categories.inspect
+          @transactions = @transactions.where(['category_id IN (?)', categories])
+        else
+          @transactions = @transactions.where(category_id: category_id)
+        end
       end
+      # Date range filter
       date_start, date_end = filter_params[:date_start], filter_params[:date_end]
       if date_start and date_end
-        puts date_end
         @transactions = @transactions.where(date: Date.parse(date_start)..Date.parse(date_end))
       end
     else
       @transactions = Transaction.all
     end
+    # Apply sorting (default to payee, ascending)
     sort_by = sort_params[:sort] || 'payee'
     if sort_by.present?
       if sort_by.start_with? '-'

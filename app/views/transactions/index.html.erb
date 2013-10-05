@@ -1,3 +1,7 @@
 <h1>Listing transactions</h1>
 
+<div class="span12" style="font-size: 1.2em">
+  <strong>Total:</strong> <%= number_to_currency @transactions.map { |t| t.amount }.inject(:+) %>
+</div>
+
 <%= render partial: 'table' %>

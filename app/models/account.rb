@@ -22,6 +22,8 @@ class Account < ActiveRecord::Base
         next if key.blank?
         trx[key] = val
       end
+      # Ignore expired transactions (usually temporary holds, or fraudulent/rejected charges)
+      next if trx['Status'] == 'Expired'
       # Store and index it
       paypal_trx << trx
       paypal_trx_by_id[trx['Transaction ID']] = trx
@@ -59,6 +61,9 @@ class Account < ActiveRecord::Base
       )
     end
 
+    # Ensure the new transactions are categorized
+    Category.categorize_all
+
     true
   end
 
@@ -80,6 +85,11 @@ class Account < ActiveRecord::Base
     end
     self.balance = ofx.account.balance
     save!
+
+    # Ensure the new transactions are categorized
+    Category.categorize_all
+
+    true
   end
 
 end

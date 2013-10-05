@@ -8,6 +8,7 @@ class StatsController < ApplicationController
     excluded = Category.find_by_name('Excluded')
     income = Category.find_by_name('Income')
     excluded_categories = categories.select { |c| [excluded, income].include? c.top_level }
+    income_categories = categories.select { |c| c.top_level == income }
 
     # Get all the transactions that aren't in the excluded categories
     @stats = Transaction.includes(:category).where.not(['category_id in (?)', excluded_categories])
@@ -15,10 +16,24 @@ class StatsController < ApplicationController
     # Get the total amounts for each category in these transactions, by month
     # The items in stats end up being variations of the Transaction model, with category, total, and month
     @stats = @stats.select('category_id, DATE(DATE_FORMAT(date, "%Y-%m-01")) AS month, SUM(amount) AS total')
-    @stats = @stats.group(:category_id, :month).order('month ASC')
+    # TODO: There seems to be a bug in ActiveRecord that comes up with you use 'month ASC' for the order
+    @stats = @stats.group(:category_id, :month).order('month, category_id')
+
+    # Separate out income into a separate data set
+    @incomes = Transaction.select('category_id, DATE(DATE_FORMAT(date, "%Y-%m-01")) AS month, SUM(amount) AS total')\
+                          .where(['category_id in (?)', income_categories])\
+                          .group(:month)\
+                          .order('month ASC')
+    @income_by_month = {}
+    @incomes.each do |i|
+      @income_by_month[i.month] ||= 0
+      @income_by_month[i.month] += i.total
+    end
+    @stats.reject! { |s| s.category == income }
 
     # Further sum/group them by top-level category if the top_level param is given
     if stat_params[:top_level].present?
+      @top_level = true
       # Basically, map-reduce them into a hash
       revised_stats = {}
       @stats.each do |s|
@@ -51,6 +66,7 @@ class StatsController < ApplicationController
     @stats.each do |s|
       @table[idx_by_category[s.category]][idx_by_month[s.month]] = s.total
     end
+
     # Pre-calculate date ranges for linking to TransactionsConttroller#index
     @date_ranges = @months.map { |m| { date_start: m, date_end: m.end_of_month } }
   end
