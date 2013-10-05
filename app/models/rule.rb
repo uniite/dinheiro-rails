@@ -1,8 +1,4 @@
 class Rule < ActiveRecord::Base
-  belongs_to :category
-
-  #TODO: Validations
-
   FIELDS = {
     date: 'Date',
     payee: 'Payee',
@@ -14,6 +10,19 @@ class Rule < ActiveRecord::Base
     startswith: 'Starts With'
   }
 
+  belongs_to :category
+
+  validates_presence_of :content
+  validates_inclusion_of :field, in: FIELDS.keys.map { |f| f.to_s }, allow_nil: false
+  validates_inclusion_of :operator, in: OPERATORS.keys.map { |o| o.to_s }, allow_nil: false
+
+  before_save :normalize!
+  after_save :execute
+
+
+  def normalize!
+    self.content = content.downcase
+  end
 
   def execute
     return unless FIELDS.keys.include? field.to_sym
