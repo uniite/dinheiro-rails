@@ -30,7 +30,7 @@ class RulesController < ApplicationController
 
     respond_to do |format|
       if @rule.save
-        format.html { redirect_to @rule, notice: 'Rule was successfully created.' }
+        format.html { redirect_to edit_category_path(id: @rule.category_id), notice: 'Rule was successfully created.' }
         format.json { render action: 'show', status: :created, location: @rule }
       else
         format.html { render action: 'new' }
@@ -44,7 +44,7 @@ class RulesController < ApplicationController
   def update
     respond_to do |format|
       if @rule.update(rule_params)
-        format.html { redirect_to @rule, notice: 'Rule was successfully updated.' }
+        format.html { redirect_to edit_category_path(id: @rule.category_id), notice: 'Rule was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -70,6 +70,6 @@ class RulesController < ApplicationController
 
     # Never trusst parameters from the scary internet, only allow the white list through.
     def rule_params
-      params.require(:rule).permit(:category_id, :field, :operation, :content)
+      params.require(:rule).permit(:category_id, :field, :operator, :content)
     end
 end

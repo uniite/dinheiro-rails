@@ -76,6 +76,14 @@
           <% end %>
         </tr>
       <% end %>
+        <tr>
+          <td><strong>Total</strong></td>
+          <% @months.each_with_index do |m,i| %>
+            <td class="currency">
+              <%= number_to_currency @table.map { |row| row[i] }.inject(:+) %>
+            </td>
+          <% end %>
+        </tr>
       </tbody>
     </table>
   </div>
