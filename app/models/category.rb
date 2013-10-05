@@ -3,6 +3,10 @@ class Category < ActiveRecord::Base
   has_many :rules
   has_many :transactions
 
+  validates_presence_of :category_id
+
+  after_destroy :uncategorize_transactions
+
 
   def self.categorize_all
     Category.all.each do |c|
@@ -22,6 +26,11 @@ class Category < ActiveRecord::Base
     else
       parent.top_level
     end
+  end
+
+  # Resets the category on all transactions assigned to this category
+  def uncategorize_transactions
+    Transaction.where(category_id: self.id).update_all(category_id: Transaction::DEFAULT_CATEGORY.id)
   end
 
 end

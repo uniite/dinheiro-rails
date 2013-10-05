@@ -7,7 +7,6 @@
       chart_series = @table.each_with_index.map do |row,i|
         { name: @categories[i].name, type: 'column', data: row.map { |x| x.to_f.abs }}
       end
-       puts @incomes.inspect
       chart_series << {
         name: 'Income',
         type: 'line',
