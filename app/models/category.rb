@@ -4,6 +4,18 @@ class Category < ActiveRecord::Base
   has_many :transactions
 
 
+  def self.categorize_all
+    Category.all.each do |c|
+      c.categorize_all
+    end
+  end
+
+  def categorize_all
+    rules.each do |r|
+      r.execute
+    end
+  end
+
   def top_level
     if parent.nil?
       self
