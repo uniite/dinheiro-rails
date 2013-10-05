@@ -5,10 +5,10 @@ class Account < ActiveRecord::Base
   has_many :transactions
 
 
-  def self.import_csv(path)
+  def import_paypal_csv(path)
     headers = nil
-    transactions = []
-    transactions_by_id = {}
+    paypal_trx = []
+    paypal_trx_by_id = {}
     CSV.foreach(path) do |line|
       # First iteration only
       if headers.nil?
@@ -23,19 +23,37 @@ class Account < ActiveRecord::Base
         trx[key] = val
       end
       # Store and index it
-      transactions << trx
-      transactions_by_id[trx['Transaction ID']] = trx
+      paypal_trx << trx
+      paypal_trx_by_id[trx['Transaction ID']] = trx
     end
 
     # Store transaction relations
-    transactions.each do |trx|
+    paypal_trx.each do |trx|
       ref = trx['Reference Txn ID']
-      if ref.present? and transactions_by_id[ref]
-        transactions_by_id[ref][:related] << trx
+      if ref.present? and paypal_trx_by_id[ref]
+        paypal_trx_by_id[ref][:related] << trx
       end
     end
 
-    [transactions, transactions_by_id]
+    # Only save to-level transactions
+    # (the ones with references are usually supporting transactions to fund a purchase)
+    paypal_trx.reject { |t| t['Reference Txn ID'].present? }.map do |t|
+      # Need to reformat the date and time for Ruby to parse it ('10/1/2013' -> '2013-10-01')
+      month, day, year = t['Date'].split('/')
+      date = Time.parse("#{year}-%02i-%02i #{t['Time']}" % [month, day])
+
+      transactions.create!(
+          # TODO: Not sure when we would want 'Gross'
+          amount: t['Net'],
+          currency: t['Currency'],
+          date: date,
+          ofx_transaction: t['Transaction ID'],
+          payee: t['Name'],
+          type: t['Type'],
+      )
+    end
+
+    true
   end
 
   def import_ofx(path)
@@ -52,7 +70,6 @@ class Account < ActiveRecord::Base
         ofx_transaction: t.fit_id,
         payee: t.name,
         type: t.type,
-        account_id: self.id,
       )
     end
     self.balance = ofx.account.balance
