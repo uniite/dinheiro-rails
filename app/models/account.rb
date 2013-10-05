@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
   has_many :transactions
 
 
-  def import_paypal_csv(path)
+  def self.parse_paypal_csv(path)
     headers = nil
     paypal_trx = []
     paypal_trx_by_id = {}
@@ -34,6 +34,12 @@ class Account < ActiveRecord::Base
         paypal_trx_by_id[ref][:related] << trx
       end
     end
+
+    [paypal_trx, paypal_trx_by_id]
+  end
+
+  def import_paypal_csv(path)
+    paypal_trx, trx_by_id = self.class.parse_paypal_csv(path)
 
     # Only save to-level transactions
     # (the ones with references are usually supporting transactions to fund a purchase)

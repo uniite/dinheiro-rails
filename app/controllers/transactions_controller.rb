@@ -5,6 +5,7 @@ class TransactionsController < ApplicationController
   # GET /transactions.json
   def index
     filter_params = params.permit(:category_id, :date_start, :date_end)
+    sort_params = params.permit(:sort)
     if filter_params
       @transactions = Transaction
       if filter_params[:category_id]
@@ -17,6 +18,18 @@ class TransactionsController < ApplicationController
       end
     else
       @transactions = Transaction.all
+    end
+    sort_by = sort_params[:sort] || 'payee'
+    if sort_by.present?
+      if sort_by.start_with? '-'
+        sort_by = sort_by[1..-1]
+        direction = 'DESC'
+      else
+        direction = 'ASC'
+      end
+      if %w{amount category date payee type}.include? sort_by
+        @transactions = @transactions.order("#{sort_by} #{direction}")
+      end
     end
   end
 
