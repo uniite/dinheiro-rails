@@ -1,12 +1,15 @@
 class Transaction < ActiveRecord::Base
   belongs_to :account
   belongs_to :category
+  # Lets us have an attribute called type, specific to transactions
+  self.inheritance_column = nil
 
-  DEFAULT_CATEGORY = Category.find_by_name('Uncategorized')
+  validates_presence_of :category_id
 
   after_initialize :ensure_category_present
 
-  self.inheritance_column = nil
+  DEFAULT_CATEGORY = Category.find_by_name('Uncategorized')
+
 
   private
     # Ensures we have some sort of category assigned,

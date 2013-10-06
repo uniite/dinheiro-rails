@@ -3,8 +3,6 @@ class Category < ActiveRecord::Base
   has_many :rules
   has_many :transactions
 
-  validates_presence_of :category_id
-
   after_destroy :uncategorize_transactions
 
 
