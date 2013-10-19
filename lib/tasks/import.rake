@@ -52,4 +52,18 @@ namespace :import do
     end
     puts "Imported #{imported} transactions"
   end
+
+  desc 'Import transactions from a PayPal CSV file'
+  task :paypal_csv, [:account_name, :path] => :environment do |t,args|
+    acct = Account.find_by_name(args[:account_name])
+    acct.transactions.destroy_all
+    acct.import_paypal_csv(args[:path])
+  end
+
+  desc 'Import transactions from an OFX file'
+  task :ofx, [:account_name, :path] => :environment do |t,args|
+    acct = Account.find_by_name(args[:account_name])
+    acct.transactions.destroy_all
+    acct.import_ofx(args[:path])
+  end
 end

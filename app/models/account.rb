@@ -51,8 +51,9 @@ class Account < ActiveRecord::Base
       date = Time.parse("#{year}-%02i-%02i #{t['Time']}" % [month, day])
 
       transactions.create!(
+          # Remove commas in the amount, or it won't parse correctly (eg. 1,500 would parse as 1)
           # TODO: Not sure when we would want 'Gross'
-          amount: t['Net'],
+          amount: t['Net'].gsub(',', ''),
           currency: t['Currency'],
           date: date,
           ofx_transaction: t['Transaction ID'],
