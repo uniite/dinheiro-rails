@@ -26,4 +26,7 @@ Dinheiro::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  # Setup the mailer domain (required by devise)
+  config.action_mailer.default_url_options = { :host => 'dinheiro.dev' }
 end

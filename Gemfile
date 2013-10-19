@@ -46,5 +46,6 @@ gem 'unicorn'
 
 
 # Gems that didn't come from the rails generators
+gem 'devise'
 gem 'httparty', '~> 0.11'
 gem 'ofx', '~> 0.3.2'

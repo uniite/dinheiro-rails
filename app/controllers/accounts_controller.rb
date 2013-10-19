@@ -1,5 +1,6 @@
 class AccountsController < ApplicationController
   #before_action :set_account, only: [:show]
+  before_filter :authenticate_user!
 
   # GET /accounts
   # GET /accounts.json

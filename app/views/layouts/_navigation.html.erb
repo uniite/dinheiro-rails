@@ -1,0 +1,28 @@
+<div class="navbar-header">
+  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <a class="navbar-brand" href="#">Dinheiro</a>
+</div>
+<div class="collapse navbar-collapse">
+  <ul class="nav navbar-nav">
+    <li id="home-tab"><%= link_to 'Home', root_path %></li>
+    <li id="accounts-tab"><%= link_to 'Accounts', accounts_path %></li>
+    <li id="categories-tab"><%= link_to 'Categories', categories_path %></li>
+    <li id="transactions-tab"><%= link_to 'Transactions', transactions_path %></li>
+    <li id="stats-tab"><%= link_to 'Stats', stats_path %></li>
+  </ul>
+  <ul class="nav navbar-nav pull-right">
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to('Logout', destroy_user_session_path, :method=>'delete') %>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to('Login', new_user_session_path)  %>
+      </li>
+    <% end %>
+  </ul>
+</div>
