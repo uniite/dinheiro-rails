@@ -1,5 +1,5 @@
-# Dinheiro (Rails Frontend)
-This application provides an alternate frontend for Dinheiro, a personal finance management app.
+# Dinheiro Rails
+This application provides an alternate frontend for [Dinheiro](https://github.com/uniite/dinheiro), a personal finance management app.
 
 ## Background
 Whereas the original frontend was written in AngularJS as part of the Django project this frontend attempts to replace it with 
