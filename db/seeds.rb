@@ -7,5 +7,5 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 unless Category.find_by_name('Uncategorized')
-  Category.new(name: 'Uncategorized', parent: nil)
+  Category.create!(name: 'Uncategorized', parent: nil)
 end

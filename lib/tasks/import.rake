@@ -38,19 +38,24 @@ namespace :import do
       api_category_mapping[cat['id']] = category.id
     end
     puts "Imported #{imported} categories"
-
+    
     HTTParty.get("#{base_url}/transactions").each do |trx|
-      unless Transaction.find_by_ofx_transaction(trx['transaction_id'])
-        trx.delete 'id'
+      trx_id = trx.delete('transaction_id') || trx.delete('id')
+      unless Transaction.find_by_ofx_transaction(trx_id)
         trx['date'] = Date.parse trx['date']
         trx['account_id'] = api_account_mapping[trx.delete('account')]
         trx['category_id'] = api_category_mapping[trx.delete('category')]
-        trx['ofx_transaction'] = trx.delete 'transaction_id'
+        trx['ofx_transaction'] = trx_id
         Transaction.create!(trx)
         imported += 1
       end
     end
     puts "Imported #{imported} transactions"
+
+    Rule.all.each do |r|
+      r.execute
+    end
+    puts "Ran #{Rule.count} rules"
   end
 
   desc 'Import transactions from a PayPal CSV file'
