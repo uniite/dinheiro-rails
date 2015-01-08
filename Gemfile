@@ -43,9 +43,20 @@ gem 'unicorn'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+gem 'byebug', group: [:development, :test]
 
 
 # Gems that didn't come from the rails generators
-gem 'devise'
+# Authentication
+gem 'devise', '~> 3.1.1'
+# HTTP Requests
 gem 'httparty', '~> 0.11'
+# OFX Financial Data Parsing
 gem 'ofx', '~> 0.3.2'
+# AWS SDK for SQS (see BackendClient)
+# TODO: Use sdk v2
+gem 'aws-sdk', '~> 1.60.2', require: 'aws'
+# Loads environment variables from .env file
+gem 'dotenv-rails', group: [:development, :test]
+# Crypto based on libsodium
+gem 'rbnacl', '~> 3.1.2'
