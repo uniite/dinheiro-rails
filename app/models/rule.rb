@@ -27,7 +27,15 @@ class Rule < ActiveRecord::Base
   def execute
     return unless FIELDS.keys.include? field.to_sym
     # TODO: This seems bad
-    matches = Transaction.where("#{field} LIKE :content", content: "%#{content}%")
+    filter = case operator
+               when 'contains'
+                 "%#{content}%"
+               when 'endswith'
+                 "%#{content}"
+               when 'startswith'
+                 "#{content}%"
+             end
+    matches = Transaction.where("#{field} LIKE :content", content: filter)
     matches.update_all(category_id: category_id)
   end
 

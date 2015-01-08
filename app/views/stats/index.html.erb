@@ -71,7 +71,7 @@
       <% @categories.each_with_index do |c,i| %>
         <tr>
           <td><strong>
-            <%= link_to c.name, transactions_path(category_id: c.id) %>
+            <%= link_to c.name, category_stats_path(category_id: c.id) %>
           </strong></td>
           <% @table[i].each_with_index do |stat,j| %>
             <% transaction_filters = { category_id: c.id }.merge(@date_ranges[j]) %>

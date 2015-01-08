@@ -21,7 +21,7 @@ class StatsController < ApplicationController
     # Note: If there are bogus category_ids, they will show up as duplicate results for 'Uncategorized'
     @stats = @stats.group(:category_id, :month).order('month, category_id')
 
-    puts @stats.select { |t| t.category_id == 16 }[-2..-1].map { |t| t.attributes }.inspect
+    #puts @stats.select { |t| t.category_id == 16 }[-2..-1].map { |t| t.attributes }.inspect
 
     # Separate out income into a separate data set
     @incomes = Transaction.select('category_id, DATE(DATE_FORMAT(date, "%Y-%m-01")) AS month, SUM(amount) AS total')\
@@ -76,7 +76,46 @@ class StatsController < ApplicationController
       @table[idx_by_category[s.category]][idx_by_month[s.month]] = s.total
     end
     puts "Found #{warnings} warnings for #{@stats.size} stats"
-    puts @stats.select { |t| t.category_id == 16 }[-2..-1].map { |t| t.attributes }.inspect
+    #puts @stats.select { |t| t.category_id == 16 }[-2..-1].map { |t| t.attributes }.inspect
+
+    # Pre-calculate date ranges for linking to TransactionsConttroller#index
+    @date_ranges = @months.map { |m| { date_start: m, date_end: m.end_of_month } }
+  end
+
+  def category
+    @category = Category.find(params[:category_id])
+
+    #@stats = @stats.group(:category_id, month_clause).sum(:amount).order("#{month_clause} ASC")
+    @stats = @category.transactions
+    # Get the total amounts for each payee in these transactions, by month
+    # The items in stats end up being variations of the Transaction model, with payee, total, and month
+    @stats = @stats.select('category_id, payee, DATE(DATE_FORMAT(date, "%Y-%m-01")) AS month, SUM(amount) AS total')
+    # Group by payee and date/month, order by month then category_id
+    # Note: If there are bogus category_ids, they will show up as duplicate results for 'Uncategorized'
+    @stats = @stats.group(:payee, :month).order('month, payee')
+
+    # Sort the payees by name
+    @payees = @stats.map { |s| s.payee }.uniq.sort { |a,b|
+      (a.nil? ? '' : a.downcase) <=> (b.nil? ? '' : b.downcase)
+    }
+    # Sort the months
+    @months = @stats.map { |s| s.month }.uniq.sort
+    # Index them for easy lookup while rendering the table
+    idx_by_payee = Hash[@payees.each_with_index.map { |c,i| [c, i] }]
+    idx_by_month = Hash[@months.each_with_index.map { |m,i| [m, i] }]
+
+    # Populate the table data (rows are payees, columns are months)
+    @table = @payees.map { |m| @months.map { |c| 0 } }
+    warnings = 0
+    @stats.each do |s|
+      if @table[idx_by_payee[s.payee]][idx_by_month[s.month]] != 0
+        warnings += 1
+        puts "Warning: Already assigned value in table[#{s.payee.name}][#{s.month}]"
+      end
+      @table[idx_by_payee[s.payee]][idx_by_month[s.month]] = s.total
+    end
+    puts "Found #{warnings} warnings for #{@stats.size} stats"
+    #puts @stats.select { |t| t.category_id == 16 }[-2..-1].map { |t| t.attributes }.inspect
 
     # Pre-calculate date ranges for linking to TransactionsConttroller#index
     @date_ranges = @months.map { |m| { date_start: m, date_end: m.end_of_month } }

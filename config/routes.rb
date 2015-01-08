@@ -24,7 +24,11 @@ Dinheiro::Application.routes.draw do
 
   resources :transactions
 
-  resources :stats
+  resources :stats do
+    collection do
+      get 'categories/:category_id', to: 'stats#category', as: :category
+    end
+  end
 
   # Example resource route with options:
   #   resources :products do

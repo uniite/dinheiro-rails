@@ -4,6 +4,7 @@
     <th>Date</th>
     <th>Payee</th>
     <th class="hidden-xs hidden-sm">Type</th>
+    <th class="hidden-xs hidden-sm">Account</th>
     <th class="hidden-xs">Category</th>
     <th>Amount</th>
     </thead>
@@ -14,6 +15,7 @@
         <td><%= t.date %></td>
         <td><%= t.payee %></td>
         <td class="hidden-xs hidden-sm"><%= t.type %></td>
+        <td class="hidden-xs hidden-sm"><%= t.account.name %></td>
         <td class="hidden-xs"><%= t.category.name %></td>
         <td style="text-align: right;"><%= number_to_currency t.amount %></td>
       </tr>
