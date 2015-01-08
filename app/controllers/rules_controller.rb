@@ -58,7 +58,7 @@ class RulesController < ApplicationController
   def destroy
     @rule.destroy
     respond_to do |format|
-      format.html { redirect_to rules_url }
+      format.html { redirect_to edit_category_path(id: @rule.category_id) }
       format.json { head :no_content }
     end
   end
